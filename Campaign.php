@@ -153,7 +153,7 @@ class Campaign extends Base
      * @param string|null required (unless groupId has been provided)
      * @return array
      */
-    public function creatCampaign($specialId = null, $groupId = null, $venueId = null)
+    public function createCampaign($specialId = null, $groupId = null, $venueId = null)
     {
         //argument test
         Argument::i()

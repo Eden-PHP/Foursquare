@@ -24,6 +24,8 @@ class Checkins extends Base
     const URL_CHECKINS_ADD_POST = 'https://api.foursquare.com/v2/checkins/%s/addpost';
     const URL_CHECKINS_DELETE_COMMENT = 'https://api.foursquare.com/v2/checkins/%s/deletecomment';
     const URL_CHECKINS_REPLY = 'https://api.foursquare.com/v2/checkins/%s/reply';
+    const URL_CHECKINS_LIKE = 'https://api.foursquare.com/v2/checkins/%s/like';
+    const URL_CHECKINS_LIKES = 'https://api.foursquare.com/v2/checkins/%s/likes';
     
     /**
      * Construct - Storing Tokens
@@ -151,7 +153,7 @@ class Checkins extends Base
      */
     public function getRecentCheckins()
     {
-        return $this->getResponse(self::URL_CHECKINS_CHECKINS, $this->query);
+        return $this->getResponse(self::URL_CHECKINS_RECENT, $this->query);
     }
     
     /**
@@ -237,5 +239,42 @@ class Checkins extends Base
         $this->query['text'] = $text;
         
         return $this->post(sprintf(self::URL_CHECKINS_REPLY, $checkinId), $this->query);
+    }
+
+    /**
+     * Like or Unlike a Checkin  
+     * 
+     * @param string The ID of the checkin to like.
+     * @param string set 1 to like and 0 to unlike
+     * @return array
+     */
+    public function likeCheckin($checkinId, $set)
+    {
+        //argument test
+        Argument::i()
+            //argument 1 must be a string
+            ->test(1, 'string')
+            //argument 2 must be a string
+            ->test(2, 'int');
+        
+        $this->query['set'] = $set;
+        
+        return $this->post(sprintf(self::URL_CHECKINS_LIKE, $checkinId), $this->query);
+    }
+
+    /**
+     * Get likes from a checkin. 
+     * 
+     * @param string The ID of the checkin to like.
+     * @return array
+     */
+    public function getCheckinLikes($checkinId)
+    {
+        //argument test
+        Argument::i()
+            //argument 1 must be a string
+            ->test(1, 'string');
+        
+        return $this->getResponse(sprintf(self::URL_CHECKINS_LIKES, $checkinId));
     }
 }

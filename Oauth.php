@@ -18,7 +18,7 @@ use Eden\Oauth\Oauth2\Client as Client;
  * @category google
  * @author Christian Blanquera cblanquera@openovate.com
  */
-class Oauth extends Base
+class Oauth extends Client
 {
     const REQUEST_URL = 'https://foursquare.com/oauth2/authorize';
     const ACCESS_URL = 'https://foursquare.com/oauth2/access_token';
@@ -40,6 +40,6 @@ class Oauth extends Base
             //Argument 4 must be a string
             ->test(3, 'string');
 
-        Client::i($clientId, $clientSecret, $redirect, self::REQUEST_URL, self::ACCESS_URL);
+        parent::__construct($clientId, $clientSecret, $redirect, self::REQUEST_URL, self::ACCESS_URL);
     }
 }
