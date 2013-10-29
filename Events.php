@@ -42,4 +42,5 @@ class Events extends Base
     {
         return $this->getResponse(self::URL_EVENTS_LIST);
     }
+
 }

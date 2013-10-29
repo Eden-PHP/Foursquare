@@ -31,6 +31,8 @@ class Lists extends Base
     const URL_LIST_FOLLOW = 'https://api.foursquare.com/v2/lists/%s/follow';
     const URL_LIST_UNFOLLOW = 'https://api.foursquare.com/v2/lists/%s/unfollow';
     const URL_LIST_SHARE = 'https://api.foursquare.com/v2/lists/%s/share';
+    const URL_LIST_DETAIL = 'https://api.foursquare.com/v2/lists/%s';
+    const URL_LIST_SAVES = 'https://api.foursquare.com/v2/lists/%s/saves';
     
     /**
      * Construct - Storing Tokens
@@ -264,6 +266,34 @@ class Lists extends Base
         
         return $this;
     }
+
+    /**
+     * Retrieve all information on a specific List. 
+     * 
+     * @param string
+     * @return Eden/Foursquare/List
+     */
+    public function getListDetail($listId)
+    {
+        //argument 1 must be a string
+        Argument::i()->test(1, 'string');
+        
+        return $this->getResponse(sprintf(self::URL_LIST_DETAIL, $listId));
+    }
+
+    /**
+     * Retrieve all users who saved a specific List.
+     * 
+     * @param string
+     * @return Eden/Foursquare/List
+     */
+    public function getListSaves($listId)
+    {
+        //argument 1 must be a string
+        Argument::i()->test(1, 'string');
+        
+        return $this->getResponse(sprintf(self::URL_LIST_SAVES, $listId));
+    }
     
     /**
      * Allows users to create a new list. 
@@ -357,6 +387,14 @@ class Lists extends Base
         
         return $this->post(sprintf(self::URL_LIST_ADD_ITEM, $listId), $this->query);
     }
+
+    public function updateList($listId)
+    {
+        //argument test
+        Argument::i()->test(1, 'string');
+
+        return $this->post(sprintf(self::URL_LIST_UPDATE, $listId), $this->query);
+    }
     
     /**
      * Allows you to update items on user-created lists. 
@@ -408,16 +446,19 @@ class Lists extends Base
      * @param string Id of the item to delete.
      * @return array
      */
-    public function moveItem($listId, $itemId)
+    public function moveItem($listId, $itemId, $beforeId)
     {
         //argument test
         Argument::i()
             //argument 1 must be a string
             ->test(1, 'string')
             //argument 2 must be a string
-            ->test(2, 'string');
+            ->test(2, 'string')
+            //argument 2 must be a string
+            ->test(3, 'string');
         
         $this->query['itemId'] = $itemId;
+        $this->query['beforeId'] = $beforeId;
         
         return $this->post(sprintf(self::URL_LIST_MOVE_ITEM, $listId), $this->query);
     }
@@ -461,7 +502,7 @@ class Lists extends Base
         //argument test
         Argument::i()->test(1, 'string');
         
-        $this->query['itemId'] = $itemId;
+        $this->query['listId'] = $listId;
         
         return $this->post(sprintf(self::URL_LIST_SHARE, $listId), $this->query);
     }
